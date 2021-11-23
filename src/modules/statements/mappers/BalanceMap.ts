@@ -9,14 +9,32 @@ export class BalanceMap {
     balance: number;
   }) {
     const parsedStatement = statement.map(
-      ({ id, amount, description, type, created_at, updated_at }) => ({
+      ({
         id,
-        amount: Number(amount),
+        sender_id,
+        amount,
         description,
         type,
         created_at,
         updated_at,
-      })
+      }) => {
+        const statement = {
+          id,
+          amount: Number(amount),
+          description,
+          type,
+          created_at,
+          updated_at,
+        };
+
+        if (type === 'transfer') {
+          Object.assign(statement, {
+            sender_id,
+          });
+        }
+
+        return statement;
+      }
     );
 
     return {
